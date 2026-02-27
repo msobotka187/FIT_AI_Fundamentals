@@ -15,7 +15,7 @@ A Python-based CLI tool that parses grid-based labyrinths and visualizes pathfin
 
 1.  **BFS (Breadth-First Search)**: Explores in even "waves" to guarantee the shortest path.
 2.  **DFS (Depth-First Search)**: Dives deep into branches.
-3.  **A* (A-Star)**: Uses Manhattan distance heuristics to "aim" efficiently at the goal.
+3.  **A\* (A-Star)**: Uses Manhattan distance heuristics to "aim" efficiently at the goal.
 4.  **Greedy Best-First Search**: Focuses solely on moving closer to the exit.
 5.  **Random Search**: Explores the labyrinth without a fixed strategy.
 
