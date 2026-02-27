@@ -1,0 +1,147 @@
+= 1. Systematické prohledávání stavového prostoru
+
+_Datum poslední  aktualizace: 22. 2. 2023_ +
+_Editace a obsah (poslední úpravy): L. Smítková Janků_
+
+== Úvod
+
+V rámci této úlohy student implementuje PĚT METOD systematického prohledávání stavového prostoru a demonstruje funkčnost implementovaných algoritmů při řešení úlohy hledání cesty v bludišti. 
+Programovací jazyk, ve kterém budou algoritmy implementovány, si volí student. 
+
+== Zadání
+
+Řešte úlohu hledání cesty v bludišti pomocí pěti metod systematického prohledávání stavového prostoru: 
+
+* Náhodné prohledávání (Random Search),
+* Prohledávání do hloubky (DFS) bez omezení hloubky (rekurzivní nebo se zásobníkem - iterativní),
+* Prohledávání do šířky (BFS),
+* Hladové prohledávání (Greedy Search),
+* A* algoritmus 
+. buď a) s takovou heuristikou, aby vždy našel nejkratší cestu.
+. nebo b) s jinou heuristikou - student musí schopen vysvětlit chování algoritmu 
+
+VSTUP: Bludiště pro testování algoritmů. Bludiště jsou dostupná ve formě textových souborů. 
+
+VÝSTUP: Jednoduchá vizualizace činnosti každého z algoritmů + výpis délky nalezené cesty + informace, která pole program započítává do délky cesty
+
+*Dílčí úkoly:*
+
+. Implementujte načtení bludiště z textového souboru.
+. Navrhněte vhodné kódování problému hledání cesty bludištěm tak, aby bylo možné k řešení použít metody systematického prohledávání stavového prostoru.
+. Implementujte 5 výše uvedených metod systematického prohledávání stavového prostoru. 
+. Implementujte jednoduchou vizualizaci činnosti algoritmů. Vizualizace spočí v tom, že algoritmus postupně vykresluje expandované stavy (uzly, pole v bludišti) tak, 
+že je možné sledovat jeho činnost. Na závěr vykreslí nalezenou cestu. 
+
+*Pseudokódy:*
+
+viz slajdy z přednášek
+
+
+*Datasety (bludiště):*
+
+. link:dataset.tar.gz[testovací dataset]
+. link:testovaci_data.zip[dataset pro hodnocení] 
+
+*Prezentace úlohy na cvičení*
+Připravte si odladěný program. Stáhněte si bludiště v testovaci.data.zip. +
+Předveďte algoritmy na testovacích datech cvičícímu. +
+Prezentovaná implementace musí umožnit sledovat postupnou expanzi stavů (uzlů, polí v bludišti). +
+
+
+*Nahrání kódu na Gitlab*
+Před prezentací úlohy cvičícímu na cvičení nahrajte Vámi vytvořený program pro řešení úlohy do svého repozitáře zřízeného pro předmět BI-ZUM na fakultním gitlabu. +
+Nechte jej v repozitáři do konce zkouškového období. +
+Postup zřízení repozitáře je popsán na hlavní stránce cvičení. 
+
+
+*Poznámky*
+
+. Je možné implementovat každý algoritmus pro prohledávání stavového prostoru jako samostatný program nebo je možné vytvořit program jeden a výběr algoritmu provádět z příkazové řádky. 
+. Pro zadávání parametrů potřebných pro běh programu (např. zadání názvu souboru s bludištěm, které má být použito) používejte přednostně standardní I/O nebo předávání parametrů při 
+volání programu z příkazové řádky. Nepoužívejte editaci zdrojového kódu programu.
+. Pokud chcete implementovat DFS s omezenou hloubkou (LDFS) nebo s omezenou hloubkou s iterativním prohlubováním, tak to udělejte jako přídavek (aktivitu navíc)
+ke klasickému DFS bez omezení hloubky.
+. Vztah mezi políčky bludiště, na které může agent vstoupit, a uzly grafu, který reprezentuje stavový prostor je 1:1 (1 políčko = 1 uzel grafu).
+
+*Vstup*
+
+Formát bludiště:
+
+----
+XXXXXXXXXXXXX
+X           X
+X  XXXXXXX  X
+X     X     X
+X X X X XXX X
+X X         X
+XX  X XXXXX X
+X   X       X
+X X X XXX XXX
+X           X
+X XXX X   X X
+X           X
+XXXXXXXXXXXXX
+start 1, 7
+end 5, 3
+----
+
+* `X` jsou neprůchozí stěny, mezery značí volný průchod. 
+* poloha je udávána v kartézských souřadnicích, přičemž počátek souřadnicového systému je v levém horním rohu a kladná poloosa osy y je orientována směrem dolů.
+* `start 1, 7` znamená, že začátek se nachází na souřadnicích [1,7].
+* Bludiště je vždy zadáno korektně, tj. bludiště je ohraničené stěnou a začátek ani konec bludiště nejsou umístěny "ve stěně".
+
+
+*Výstup* 
+
+Požadovaným výstupem je jednoduchá vizualizace činnosti každého algoritmu. *Bez splnění tohoto cíle nebude úloha hodnocena a nebude možné ji odevzdat*. 
+Implementujte jednoduchou vizualizaci, 
+kdy v každé iteraci bude zobrazována činnost algoritmu v terminálu (krokování). Musí být vidět postupné otevírání uzlů a na závěr musí být zobrazena nalezená cesta. 
+Po skončení algoritmu vypište počet expandovaných uzlů a délku cesty - počet kroků (hran) od startu do cíle. 
+
+Příklad výstupu:
+
+----
+XXXXXXXXXXXXX
+X           X
+X  XXXXXXX  X
+X ###EX     X
+X X#XoX XXX X
+X Xooo#     X
+XX#oX#XXXXX X
+XSooX       X
+X#X#X XXX XXX
+X           X
+X XXX X   X X
+X           X
+XXXXXXXXXXXXX
+---------------------------------------
+S Start
+E End
+# Opened node
+o Path
+X Wall
+space Fresh node
+---------------------------------------
+Nodes expanded: 17
+Path length: 8
+----
+
+
+
+== Formální požadavky a odevzdání
+
+* Před prezentací úlohy cvičícímu na cvičení nahrajte úlohu do svého repozitáře zřízeného pro předmět BI-ZUM na fakultním gitlabu. Postup zřízení repozitáře je popsán na hlavní stránce cvičení. 
+
+
+== Doporučená litearatura k úloze 1
+
+[1] Depth-First Search (DFS) https://brilliant.org/wiki/depth-first-search-dfs/
+
+[2] přednášky BI-ZUM (najdete v nich pseudokódy algoritmů)
+
+[3] Norvig, Russel: Artificial Intelligence: A Modern Approach,
+link:http://unina.stidue.net/Intelligenza%20Artificiale/Materiale/Artificial%20Intelligence%20-%20A%20Modern%20Approach%202nd%20ed%20-%20S.%20Russell,%20P.%20Norvig%20(Prentice-Hall,%202003).pdf[PDF]
+
+[4] pseudokódy ke kapitolám z dané knihy
+http://aima.cs.berkeley.edu/algorithms.pdf
+
