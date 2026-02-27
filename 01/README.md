@@ -6,7 +6,7 @@ A Python-based CLI tool that parses grid-based labyrinths and visualizes pathfin
 
 * **Interactive CLI**: Select your file and algorithm via a numbered menu.
 * **RGB Heatmap Visualization**:
-    * **Search Process**: Visualized with a gradient from **<span style="color: #40E0D0;">Turquoise</span>** (early discovery) to **<span style="color: #FF00FF;">Magenta</span>** (late discovery).
+    * **Search Process**: Visualized with a gradient from **Turquoise**`#00FFF0` (early discovery) to **Magenta**`#FF00FF` (late discovery).
     * **Final Path**: Overlayed with a high-contrast **Yellow-to-Orange** gradient.
 * **Performance Metrics**: Automatically calculates **Nodes Expanded** (efficiency) and **Path Length** (optimality).
 * **Safety Thresholds**: Detects large mazes and prompts for confirmation to prevent terminal lag.
@@ -29,10 +29,14 @@ To install the necessary dependency, run:
 pip install rich
 ```
 
+
 | Element | Visualization | Description |
 | :--- | :--- | :--- |
 | **Start/End** | **`S` / `E`** | Green 'S' for start, Red 'E' for exit. |
-| **Early Discovery** | **<span style="color: #40E0D0;">░ Turquoise</span>** | Nodes explored at the beginning of the search. |
-| **Late Discovery** | **<span style="color: #FF00FF;">░ Magenta</span>** | Nodes explored as the algorithm progressed. |
-| **Final Path** | **<span style="color: #FFA500;">█ Orange</span>** | The actual solution found by the algorithm. |
-| **Unvisited** | **<span style="color: #FF0000;">█ Red</span>** | Walkable paths that were never expanded. |
+| **Early Discovery** | **`#00FFF0` Turquoise** | Nodes explored at the beginning of the search. |
+| **Mid Discovery** | **`#0000FF` Blue** | Transition phase of the search algorithm. |
+| **Late Discovery** | **`#FF00FF` Magenta** | Nodes explored as the algorithm reached its limit. |
+| **Final Path** | **`#FFFF00` Yellow** | The actual solution found (Start of path). |
+| **Final Path** | **`#FF3200` Orange** | The actual solution found (End of path). |
+| **Unvisited** | **`#FF0000` Red** | Walkable paths that were never expanded. |
+| **Walls** | **`#FFFFFF` White** | Non-traversable boundaries. |
