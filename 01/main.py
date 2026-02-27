@@ -214,8 +214,7 @@ def a_star(graph):
     visited_order = {}
     step_count = 0
 
-    heapq.heappush(open_pq, (heuristic(neighbor), graph.end)
-, graph.start))
+    heapq.heappush(open_pq, (heuristic(graph.start, graph.end), graph.start))
 
     while open_pq:
         _, x = heapq.heappop(open_pq)
