@@ -65,13 +65,22 @@ def data_to_graph(data_string) -> tuple[Graph, int, int]:
 
     # 2. Build neighbor list
     for (x, y) in graph.vertices:
+        # Only check Right and Down to avoid double adding
         for dx, dy in [(1, 0), (0, 1)]:
             neighbor = (x + dx, y + dy)
             if neighbor in graph.neighbors:
                 graph.add_edge((x, y), neighbor)
 
-    # Return the tuple as requested
     return graph, rows, cols
+
+
+def reconstruct_path(parents, end):
+    path = []
+    curr = end
+    while curr is not None:
+        path.append(curr)
+        curr = parents[curr]
+    return path[::-1]
 
 def random_search(graph):
     stack = [graph.start]
@@ -130,14 +139,6 @@ def dfs(graph):
 
     return None, visited_order
 
-def reconstruct_path(parents, end):
-    path = []
-    curr = end
-    while curr is not None:
-        path.append(curr)
-        curr = parents[curr]
-    return path[::-1]
-
 def bfs(graph):
     queue = collections.deque([graph.start])
     parents = {graph.start: None}
@@ -195,9 +196,15 @@ def greedy_search(graph):
     return None, visited_order
 
 def a_star(graph):
+<<<<<<< HEAD
     def h(p):
         # Manhattan distance heuristic:
         return abs(p[0] - graph.end[0]) + abs(p[1] - graph.end[1])
+=======
+    def heuristic(a, b):
+        # Manhattan distance
+        return abs(a[0] - b[0]) + abs(a[1] - b[1])
+>>>>>>> 14d2534 (Fixed main.py)
 
     open_pq = []
     dist = {graph.start: 0}
@@ -207,7 +214,8 @@ def a_star(graph):
     visited_order = {}
     step_count = 0
 
-    heapq.heappush(open_pq, (h(graph.start), graph.start))
+    heapq.heappush(open_pq, (heuristic(neighbor), graph.end)
+, graph.start))
 
     while open_pq:
         _, x = heapq.heappop(open_pq)
@@ -231,7 +239,7 @@ def a_star(graph):
                 dist[y] = d0
                 prev[y] = x
 
-                heapq.heappush(open_pq, (d0 + h(y), y))
+                heapq.heappush(open_pq, (d0 + heuristic(y, graph.end), y))
 
         closed.add(x)
 
@@ -259,8 +267,6 @@ def print_labyrinth(text_form) -> None:
     for line in lines[:-2]:
         print(line)
 
-console = Console()
-
 def get_heatmap_color(step, total_steps) -> str:
     if total_steps < 0: raise ValueError("Total steps cannot be negative")
     if total_steps == 0: return "rgb(0,255,240)"
@@ -285,7 +291,7 @@ def get_heatmap_color(step, total_steps) -> str:
 
     return f"rgb({r},{g},{b})"
 
-def print_solved(graph, visited_order, final_path=None):
+def print_solved(graph, visited_order, final_path=None) -> None:
     if not graph.vertices: return
 
     # Calculate bounds
@@ -311,6 +317,7 @@ def print_solved(graph, visited_order, final_path=None):
             elif curr in path_indices:
                 step = path_indices[curr]
                 t = step / max(total_path_steps, 1)
+
                 # Interpolating Yellow (255, 255, 0) to Orange (255, 30, 0)
                 r, g, b = 255, int(255 - ((255 - 30) * t)), 0
                 path_color = f"rgb({r},{g},{b})"
@@ -332,6 +339,7 @@ def print_solved(graph, visited_order, final_path=None):
         rprint(line)
 
     # --- Print Statistics ---
+    print()
     rprint("-" * 30)
     rprint(f"[bold cyan]Nodes Expanded: {len(visited_order)}[/]")
     if final_path:

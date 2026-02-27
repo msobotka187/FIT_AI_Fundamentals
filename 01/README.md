@@ -2,7 +2,7 @@
 
 A Python-based CLI tool that parses grid-based labyrinths and visualizes pathfinding algorithms using a custom **RGB Heatmap**. This project demonstrates the efficiency and behavior of different search strategies through terminal graphics.
 
-## 🚀 Features
+## ✨ Features
 
 * **Interactive CLI**: Select your file and algorithm via a numbered menu.
 * **RGB Heatmap Visualization**:
@@ -24,7 +24,17 @@ A Python-based CLI tool that parses grid-based labyrinths and visualizes pathfin
 * **Python 3.10+**
 * **Rich Library**: Used for the advanced terminal rendering and RGB support.
 
+## 🚀 How to Run
 
+Follow these steps to explore and visualize the pathfinding algorithms:
+
+1. **Prepare your Maze**: Place your labyrinth `.txt` file into the `dataset/` or `testovaci_data/` folder. You can also use the pre-loaded default mazes.
+2. **Execute the Solver**: Run the main.py script from your terminal
+3. **Select a File:** When prompted, enter the number corresponding to your chosen maze.
+4. **Choose an Algorithm:** Select pathfinding strategy you wish to visualize
+5. **Analyze the Result:** Enjoy the high-resolution heatmap visualization and compare performance statistics!
+
+## 🎨 Color Legend
 
 | Element | Visualization | Description |
 | :--- | :--- | :--- |
