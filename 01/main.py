@@ -415,9 +415,9 @@ def main() -> None:
             # Even if we don't print the maze, we should still see the stats!
             rprint("[bold cyan]\nSkipping visual display\n[/]")
             rprint("-" * 30)
-            rprint(f"[bold cyan]Nodes Expanded:[/] {len(order)}")
+            rprint(f"[bold cyan]Nodes Expanded: {len(order)}[/]")
             if path:
-                rprint(f"[bold green]Path Length:[/]    {len(path)}")
+                rprint(f"[bold green]Path Length:    {len(path)}[/]")
             else:
                 rprint("[bold red]Path Length:    N/A (No path found)[/]")
                 rprint("-" * 30)
