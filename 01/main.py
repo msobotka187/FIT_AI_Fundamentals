@@ -187,7 +187,7 @@ def greedy_search(graph):
             return reconstruct_path(parents, graph.end), visited_order
 
         for neighbor in graph.neighbors.get(curr, []):
-            if neighbor not in visited:
+           if neighbor not in visited:
                 parents[neighbor] = curr
                 # Priority is just the distance to the end
                 priority = heuristic(neighbor, graph.end)
@@ -196,15 +196,9 @@ def greedy_search(graph):
     return None, visited_order
 
 def a_star(graph):
-<<<<<<< HEAD
-    def h(p):
-        # Manhattan distance heuristic:
-        return abs(p[0] - graph.end[0]) + abs(p[1] - graph.end[1])
-=======
     def heuristic(a, b):
         # Manhattan distance
         return abs(a[0] - b[0]) + abs(a[1] - b[1])
->>>>>>> 14d2534 (Fixed main.py)
 
     open_pq = []
     dist = {graph.start: 0}
