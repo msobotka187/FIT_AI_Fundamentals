@@ -187,7 +187,7 @@ def greedy_search(graph):
             return reconstruct_path(parents, graph.end), visited_order
 
         for neighbor in graph.neighbors.get(curr, []):
-           if neighbor not in visited:
+            if neighbor not in visited:
                 parents[neighbor] = curr
                 # Priority is just the distance to the end
                 priority = heuristic(neighbor, graph.end)
