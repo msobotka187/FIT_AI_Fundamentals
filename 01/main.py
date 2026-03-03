@@ -4,7 +4,6 @@
 from pathlib import Path
 from itertools import chain
 from rich import print as rprint
-from rich.console import Console
 import collections
 import heapq
 import random
@@ -238,27 +237,6 @@ def a_star(graph):
 
     return None, visited_order
 
-def print_labyrinth(text_form) -> None:
-    lines = [line.rstrip() for line in text_form.strip().split('\n')]
-
-    # --- Print 's' and 'e' ---
-    start = lines[-2].replace("start", "").strip().split(", ")
-    end   = lines[-1].replace("end",   "").strip().split(", ")
-
-    s_row, s_col = int(start[1]), int(start[0])
-    e_row, e_col = int(end[1]), int(end[0])
-
-    row_s = list(lines[s_row])
-    row_s[s_col] = "s"
-    lines[s_row] = "".join(row_s)
-
-    row_e = list(lines[e_row])
-    row_e[e_col] = "e"
-    lines[e_row] = "".join(row_e)
-    # ------------------------
-
-    for line in lines[:-2]:
-        print(line)
 
 def get_heatmap_color(step, total_steps) -> str:
     if total_steps < 0: raise ValueError("Total steps cannot be negative")
