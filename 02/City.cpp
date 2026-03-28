@@ -9,8 +9,8 @@ double City::getY()  const { return m_y; }
 
 // Euklid distance
 double City::distanceTo(const City & other) const {
-  double dx = this->x - other.x;
-  double dy = this->y - other.y;
+  double dx = this->m_x - other.m_x;
+  double dy = this->m_y - other.m_y;
 
   return std::sqrt(dx*dx + dy*dy);
 }
