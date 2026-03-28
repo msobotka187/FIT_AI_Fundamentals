@@ -3,6 +3,10 @@
 
 City::City(int id, double x, double y) : m_id(id), m_x(x), m_y(y) {}
 
+int    City::getId() const { return m_id; }
+double City::getX()  const { return m_x; }
+double City::getY()  const { return m_y; }
+
 // Euklid distance
 double City::distanceTo(const City & other) const {
   double dx = this->x - other.x;

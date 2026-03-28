@@ -7,9 +7,9 @@ public:
   City(int id, double x, double y);
 
   // Getters
-  int    getId() const return { m_id; };
-  double getX()  const return { m_x; };
-  double getY()  const return { m_y; };
+  int    getId() const;
+  double getX()  const;
+  double getY()  const;
 
   // Logic Functions
   double distanceTo(const City & other) const;
