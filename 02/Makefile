@@ -1,9 +1,14 @@
 CXX = g++
 CXXFLAGS = -std=c++20 -Wall -pedantic -Wno-long-long -O2 -Werror
 
-LDFLAGS = -lraylib -lGL -lm -lpthread -ldl -lrt -lX11
+ifeq ($(OS),Windows_NT)
+	TARGET = main.exe
+	LDFLAGS = -lraylib -lopengl32 -lgdi32 -lwinmm
+else
+	TARGET = main
+	LDFLAGS = -lraylib -lGL -lm -lpthread -ldl -lrt -lX11
+endif
 
-TARGET = main
 
 SRCS = main.cpp City.cpp TSPGraph.cpp SimulatedAnnealing.cpp Visualizer.cpp
 
@@ -16,6 +21,9 @@ $(TARGET): $(OBJS)
 
 %.o: %.cpp
 	$(CXX) $(CXXFLAGS) -c $< -o $@
+
+run: $(TARGET)
+	./$(TARGET)
 
 clean:
 	rm -rf $(OBJS) $(TARGET)
