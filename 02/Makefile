@@ -1,5 +1,5 @@
 CXX = g++
-CXXFLAGS = -std=c++20 -Wall -pedantic -Wno-long-long -O2 -c -Werror
+CXXFLAGS = -std=c++20 -Wall -pedantic -Wno-long-long -O2 -Werror
 
 LDFLAGS = # TODO
 
