@@ -1,7 +1,7 @@
 CXX = g++
 CXXFLAGS = -std=c++20 -Wall -pedantic -Wno-long-long -O2 -Werror
 
-LDFLAGS = # TODO
+LDFLAGS = -lraylib -lGL -lm -lpthread -ldl -lrt -lX11
 
 TARGET = main
 
