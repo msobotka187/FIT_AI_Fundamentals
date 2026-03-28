@@ -21,6 +21,7 @@ public:
   const std::vector<int> & getCurrRoute() const;
   double getBestDistance() const;
   double getCurrTemp() const;
+  double getMinTemp() const;
 
   // Does one step of the algorithm
   void step();

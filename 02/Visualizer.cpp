@@ -39,19 +39,21 @@ void Visualizer::run() {
 
 void Visualizer::draw() {
   BeginDrawing();
-  ClearBackground(RAYWHITE);
+  ClearBackground(DARKGRAY);
 
   // Drawing of the current route
-  const auto & currRoute = m_sa.getCurrRoute();
-  for (size_t i = 0; i < currRoute.size(); i++) {
-    int cityA = currRoute[i];
-    int cityB = currRoute[(i + 1) % currRoute.size()];
+  if (!m_sa.isDone()) {
+    const auto & currRoute = m_sa.getCurrRoute();
+    for (size_t i = 0; i < currRoute.size(); i++) {
+      int cityA = currRoute[i];
+      int cityB = currRoute[(i + 1) % currRoute.size()];
 
-    DrawLine(
-      (int)m_graph.getCity(cityA).getX(), (int)m_graph.getCity(cityA).getY(),
-      (int)m_graph.getCity(cityB).getX(), (int)m_graph.getCity(cityB).getY(),
-      LIGHTGRAY
-    );
+      DrawLine(
+          (int)m_graph.getCity(cityA).getX(), (int)m_graph.getCity(cityA).getY(),
+          (int)m_graph.getCity(cityB).getX(), (int)m_graph.getCity(cityB).getY(),
+          RAYWHITE
+      );
+    }
   }
 
   // Drawing of the best route
@@ -63,7 +65,7 @@ void Visualizer::draw() {
     DrawLineEx(
       {(float)m_graph.getCity(cityA).getX(), (float)m_graph.getCity(cityA).getY()},
       {(float)m_graph.getCity(cityB).getX(), (float)m_graph.getCity(cityB).getY()},
-      2.0f, GOLD
+      2.0f, LIME
     );
   }
 
@@ -73,11 +75,11 @@ void Visualizer::draw() {
   }
 
   // Print statistics to the corner
-  DrawText(TextFormat("Temperature: %.2f", m_sa.getCurrTemp()), 10, 10, 20, BLACK);
-  DrawText(TextFormat("Best Distance: %.2f", m_sa.getBestDistance()), 10, 35, 20, DARKGREEN);
+  DrawText(TextFormat("Temperature: %.2f", m_sa.isDone() ? m_sa.getMinTemp() : m_sa.getCurrTemp()), 10, 10, 20, RAYWHITE);
+  DrawText(TextFormat("Best Distance: %.2f", m_sa.getBestDistance()), 10, 35, 20, LIME);
 
   if (m_sa.isDone()) {
-    DrawText("DONE", 10, 60, 20, MAROON);
+    DrawText("DONE!", 10, 60, 20, RED);
   }
 
   EndDrawing();

@@ -7,8 +7,12 @@ TSPGraph::TSPGraph(int numCities, double width, double height) : m_numCities(num
   std::mt19937 gen(rd());
 
   // "Real" numbers form 0 - width/height
-  std::uniform_real_distribution<> disX(0.0, width);
-  std::uniform_real_distribution<> disY(0.0, height);
+  double marginUP    = 80.0;
+  double marginDOWN  = 30.0;
+  double marginLEFT  = 30.0;
+  double marginRIGHT = 30.0;
+  std::uniform_real_distribution<> disX(marginLEFT, width  - marginRIGHT);
+  std::uniform_real_distribution<> disY(marginUP,   height - marginDOWN);
 
   // Pass them to vector
   m_cities.reserve(numCities);

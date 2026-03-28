@@ -138,3 +138,4 @@ const std::vector<int> & SimulatedAnnealing::getBestRoute() const { return m_bes
 const std::vector<int> & SimulatedAnnealing::getCurrRoute() const { return m_currRoute; }
 double SimulatedAnnealing::getBestDistance() const { return m_bestDistance; }
 double SimulatedAnnealing::getCurrTemp()     const { return m_currTemp; }
+double SimulatedAnnealing::getMinTemp()      const { return m_minTemp;  }
