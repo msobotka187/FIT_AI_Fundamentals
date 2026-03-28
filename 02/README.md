@@ -22,9 +22,11 @@ A high-performance C++ tool that solves the **Symmetric Traveling Salesman Probl
 * **Raylib**: A simple and easy-to-use library to enjoy video games programming (used for 2D rendering).
 
 ## 🚀 How to Run
-Works on **Windows**/**Linux**
+**Linux**
 Follow these steps to compile and launch the visualization:
 
 1. **Install Raylib**: Ensure Raylib is installed on your system [github](https://github.com/raysan5/raylib).
 2. **Compile the Project**: Open your terminal in the project directory and run the `make run` command to build and run the executable.
 
+**Windows**
+Download the `main.exe` file in releases.
