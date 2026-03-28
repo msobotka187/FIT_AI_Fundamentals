@@ -1,0 +1,84 @@
+#include "Visualizer.h"
+#include <raylib.h>
+#include <string>
+
+Visualizer::Visualizer(
+    const TSPGraph & graph,
+    SimulatedAnnealing & sa,
+    int width,
+    int height
+)
+  : m_graph(graph),
+    m_sa(sa),
+    m_width(width),
+    m_height(height)
+{
+  // Initialize Raylib window
+  InitWindow(m_width, m_height, "TSP - SimulatedAnnealing");
+
+  // Set FPS to 60 for smooth animation
+  SetTargetFPS(60);
+}
+
+Visualizer::~Visualizer() {
+  CloseWindow();
+}
+
+void Visualizer::run() {
+  // Run until user closes the window
+  while (!WindowShouldClose()) {
+    // If not on minTemp, do a step
+    if (!m_sa.isDone()) {
+      m_sa.step();
+    }
+
+    // Draw right after that
+    draw();
+  }
+}
+
+void Visualizer::draw() {
+  BeginDrawing();
+  ClearBackground(RAYWHITE);
+
+  // Drawing of the current route
+  const auto & currRoute = m_sa.getCurrRoute();
+  for (size_t i = 0; i < currRoute.size(); i++) {
+    int cityA = currRoute[i];
+    int cityB = currRoute[(i + 1) % currRoute.size()];
+
+    DrawLine(
+      (int)m_graph.getCity(cityA).getX(), (int)m_graph.getCity(cityA).getY(),
+      (int)m_graph.getCity(cityB).getX(), (int)m_graph.getCity(cityB).getY(),
+      LIGHTGRAY
+    );
+  }
+
+  // Drawing of the best route
+  const auto & bestRoute = m_sa.getBestRoute();
+  for (size_t i = 0; i < bestRoute.size(); i++) {
+    int cityA = bestRoute[i];
+    int cityB = bestRoute[(i + 1) % bestRoute.size()];
+
+    DrawLineEx(
+      {(float)m_graph.getCity(cityA).getX(), (float)m_graph.getCity(cityA).getY()},
+      {(float)m_graph.getCity(cityB).getX(), (float)m_graph.getCity(cityB).getY()},
+      2.0f, GOLD
+    );
+  }
+
+  // Drawing of the cities
+  for (const auto & city : m_graph.getCities()) {
+    DrawCircle((int)city.getX(), (int)city.getY(), 4.0f, BLUE);
+  }
+
+  // Print statistics to the corner
+  DrawText(TextFormat("Temperature: %.2f", m_sa.getCurrTemp()), 10, 10, 20, BLACK);
+  DrawText(TextFormat("Best Distance: %.2f", m_sa.getBestDistance()), 10, 35, 20, DARKGREEN);
+
+  if (m_sa.isDone()) {
+    DrawText("DONE", 10, 60, 20, MAROON);
+  }
+
+  EndDrawing();
+}
