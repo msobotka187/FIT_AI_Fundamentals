@@ -48,6 +48,7 @@ private:
   // Helper private methods
   void generateInitialRoute();
   double calculateDistance(const std::vector<int> & route) const;
+  double calculateDistanceDiff(int idx1, int idx2) const;
 };
 
 #endif // SIMULATEDANNEALING_H

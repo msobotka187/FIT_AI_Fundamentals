@@ -19,6 +19,13 @@ SimulatedAnnealing::SimulatedAnnealing(
   std::random_device rd;
   m_gen.seed(rd());
 
+  // Does not make sence for less than 3 cities
+  if (m_graph.getNumCities() < 3) {
+    m_currDistance = 0.0;
+    m_bestDistance = 0.0;
+    return;
+  }
+
   generateInitialRoute();
   m_currDistance = calculateDistance(m_currRoute);
 
@@ -42,7 +49,7 @@ double SimulatedAnnealing::calculateDistance(const std::vector<int> & route) con
   int n = route.size();
 
   // Add distances between two following cities
-  for (int i = 0; i < n; i++) {
+  for (int i = 0; i < n - 1; i++) {
     dist += m_graph[route[i]][route[i + 1]];
   }
   // Add distance between the last and first as well
@@ -51,9 +58,35 @@ double SimulatedAnnealing::calculateDistance(const std::vector<int> & route) con
   return dist;
 }
 
-// TODO: what if getNumCities is 1? handle this somehow
+double SimulatedAnnealing::calculateDistanceDiff(int idx1, int idx2) const {
+  int n = m_currRoute.size();
+
+  // ... -> A -> [B -> ... -> C] -> D -> ...
+  // Edge A -> B and C -> D gets deleted
+  // Everything iniside B -> ... -> C stays unchaned (only reversed)
+
+  // Cities on the edge
+  int cityB = m_currRoute[idx1];
+  int cityC = m_currRoute[idx2];
+
+  // Cities before and after reversed range
+  int cityA = m_currRoute[(idx1 - 1 + n) % n];
+  int cityD = m_currRoute[(idx2 + 1) % n];
+
+  // Old edges gets deleted
+  double oldEdges = m_graph[cityA][cityB] + m_graph[cityC][cityD];
+
+  // New edges are added
+  double newEdges = m_graph[cityA][cityC] + m_graph[cityB][cityD];
+
+  // And return difference between them
+  return newEdges - oldEdges;
+}
+
 void SimulatedAnnealing::step() {
-  if (isDone()) return;
+  // Does not make sense to solve for less then 3 cities,
+  // it could also, for 1 city, enter a infinite loop in while (idx1 == idx2)
+  if (isDone() || m_graph.getNumCities() < 3) return;
 
   std::uniform_real_distribution<> probDist(0.0, 1.0);
   std::uniform_int_distribution<>  cityDist(0, m_graph.getNumCities() - 1);
@@ -70,20 +103,19 @@ void SimulatedAnnealing::step() {
     // Make idx1 smaller
     if (idx1 > idx2) std::swap(idx1, idx2);
 
-    // Create neighboring state (2-opt: reverse route between idx1 and idx2)
-    std::vector<int> newRoute = m_currRoute;
-    std::reverse(newRoute.begin() + idx1, newRoute.begin() + idx2 + 1);
+    // If we would reverse the whole thing, nothing would change
+    if (idx1 == 0 && idx2 == m_graph.getNumCities() - 1) continue;
 
-    double newDistance = calculateDistance(newRoute);
+    double diff = calculateDistanceDiff(idx1, idx2);
 
     // Metropolis criterion
-    double deltaE = m_currDistance - newDistance;
     if (
-        newDistance < m_currDistance ||   // We take newRoute if newDistnace is smaller
-        probDist(m_gen) < std::exp(deltaE / m_currTemp) // or with probability < e^(ΔE / cT) even if it's worse (avoid local mins)
+        diff < 0 ||   // We take newRoute if newDistnace (diff) is smaller (< 0)
+        probDist(m_gen) < std::exp(-diff / m_currTemp) // or with probability < e^(ΔE / cT) even if it's worse (avoid local mins)
     ) {
-      m_currRoute    = std::move(newRoute);
-      m_currDistance = newDistance;
+      // Reverse it here
+      std::reverse(m_currRoute.begin() + idx1, m_currRoute.begin() + idx2 + 1);
+      m_currDistance += diff;
 
       // Global minimum update
       if (m_currDistance < m_bestDistance) {
