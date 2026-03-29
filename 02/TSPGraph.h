@@ -7,7 +7,7 @@
 class TSPGraph {
 public:
   // Constructors
-  TSPGraph(int numCities, double width, double height);
+  TSPGraph(int numCities);
 
   // Getters
   double getDistance(int from, int to) const;

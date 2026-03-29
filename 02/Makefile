@@ -5,7 +5,7 @@ TARGET = main
 
 LDFLAGS = -lraylib -lGL -lm -lpthread -ldl -lrt -lX11
 
-SRCS = main.cpp City.cpp TSPGraph.cpp SimulatedAnnealing.cpp Visualizer.cpp
+SRCS = main.cpp Constants.cpp City.cpp TSPGraph.cpp SimulatedAnnealing.cpp Visualizer.cpp
 
 OBJS = $(SRCS:.cpp=.o)
 

@@ -2,19 +2,14 @@
 #define SIMULATEDANNEALING_H
 
 #include "TSPGraph.h"
+
 #include <vector>
 #include <random>
 
 class SimulatedAnnealing {
 public:
   // Constructors
-  SimulatedAnnealing(
-      const TSPGraph & graph,
-      double startTemp,
-      double minTemp,
-      double coolingRate,
-      int iterationsPerStep
-  );
+  SimulatedAnnealing(const TSPGraph & graph);
 
   // Getters
   const std::vector<int> & getBestRoute() const;

@@ -1,18 +1,20 @@
 #include "TSPGraph.h"
+#include "Constants.h"
+
 #include <random>
 
-TSPGraph::TSPGraph(int numCities, double width, double height) : m_numCities(numCities) {
+TSPGraph::TSPGraph(int numCities) : m_numCities(numCities) {
   // C++ random generator
   std::random_device rd;
   std::mt19937 gen(rd());
 
   // "Real" numbers form 0 - width/height
-  double marginUP    = 80.0;
-  double marginDOWN  = 30.0;
-  double marginLEFT  = 30.0;
-  double marginRIGHT = 30.0;
-  std::uniform_real_distribution<> disX(marginLEFT, width  - marginRIGHT);
-  std::uniform_real_distribution<> disY(marginUP,   height - marginDOWN);
+  std::uniform_real_distribution<> disX(
+      Constants::GEN_START_X, Constants::GEN_END_X
+  );
+  std::uniform_real_distribution<> disY(
+      Constants::GEN_START_Y, Constants::GEN_END_Y
+  );
 
   // Pass them to vector
   m_cities.reserve(numCities);

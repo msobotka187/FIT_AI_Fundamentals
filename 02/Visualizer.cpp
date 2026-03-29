@@ -1,31 +1,16 @@
 #include "Visualizer.h"
+#include "Constants.h"
+
 #include <raylib.h>
 #include <string>
 
-Visualizer::Visualizer(
-    const TSPGraph & graph,
-    SimulatedAnnealing & sa,
-    int width,
-    int height
-)
-  : m_graph(graph),
-    m_sa(sa),
-    m_width(width),
-    m_height(height)
-{}
+Visualizer::Visualizer(const TSPGraph & graph, SimulatedAnnealing & sa) : m_graph(graph), m_sa(sa) {}
 
 bool Visualizer::run() {
-  float btnWidth   = 100.0f;
-  float btnHeight  = 30.0f;
-  float btnMarginY = 20.0f;
-
-  Rectangle btnBounds = {
-    (m_width / 2.0f) - (btnWidth / 2.0f), m_height - btnMarginY - btnHeight,
-    btnWidth, btnHeight
-  };
+  Rectangle btnBounds = Constants::BTN_BOUNDS;
 
   // Run until user closes the window
-  while (!WindowShouldClose()) {
+  while (!WindowShouldClose() && !IsKeyPressed(KEY_Q)) {
     Vector2 mousePos = GetMousePosition();
     bool isHovered = CheckCollisionPointRec(mousePos, btnBounds);
 
@@ -49,7 +34,7 @@ bool Visualizer::run() {
 
 void Visualizer::draw(bool isBtnHovered) {
   BeginDrawing();
-  ClearBackground(DARKGRAY);
+  ClearBackground(Constants::BACKGROUND_COLOR);
 
   // Drawing of the current route
   if (!m_sa.isDone()) {
@@ -61,7 +46,7 @@ void Visualizer::draw(bool isBtnHovered) {
       DrawLine(
           (int)m_graph.getCity(cityA).getX(), (int)m_graph.getCity(cityA).getY(),
           (int)m_graph.getCity(cityB).getX(), (int)m_graph.getCity(cityB).getY(),
-          RAYWHITE
+          Constants::CURR_ROUTE_COLOR
       );
     }
   }
@@ -75,43 +60,65 @@ void Visualizer::draw(bool isBtnHovered) {
     DrawLineEx(
       {(float)m_graph.getCity(cityA).getX(), (float)m_graph.getCity(cityA).getY()},
       {(float)m_graph.getCity(cityB).getX(), (float)m_graph.getCity(cityB).getY()},
-      2.0f, LIME
+      Constants::BEST_ROUTE_WIDTH, Constants::BEST_ROUTE_COLOR
     );
   }
 
   // Drawing of the cities
   for (const auto & city : m_graph.getCities()) {
-    DrawCircle((int)city.getX(), (int)city.getY(), 4.0f, BLUE);
+    DrawCircle(
+        (int)city.getX(),
+        (int)city.getY(),
+        Constants::CITY_CIRCLE_WIDTH,
+        Constants::CITY_COLOR
+    );
   }
 
   // Print statistics to the corner
-  DrawText(TextFormat("Temperature: %.2f", m_sa.isDone() ? m_sa.getMinTemp() : m_sa.getCurrTemp()), 10, 10, 20, RAYWHITE);
-  DrawText(TextFormat("Best Distance: %.2f", m_sa.getBestDistance()), 10, 35, 20, LIME);
+  DrawText(
+      TextFormat("Temperature: %.2f", m_sa.isDone() ? m_sa.getMinTemp() : m_sa.getCurrTemp()),
+      Constants::TEMP_TEXT_X,
+      Constants::TEMP_TEXT_Y,
+      Constants::TEMP_FONT_SIZE,
+      Constants::TEMP_TEXT_COLOR
+  );
+  DrawText(
+      TextFormat("Best Distance: %.2f", m_sa.getBestDistance()),
+      Constants::DIST_TEXT_X,
+      Constants::DIST_TEXT_Y,
+      Constants::DIST_FONT_SIZE,
+      Constants::DIST_TEXT_COLOR
+  );
 
   if (m_sa.isDone()) {
-    DrawText("DONE!", 10, 60, 20, RED);
+    DrawText(
+        "DONE!",
+        Constants::DONE_TEXT_X,
+        Constants::DONE_TEXT_Y,
+        Constants::DONE_FONT_SIZE,
+        Constants::DONE_TEXT_COLOR
+    );
   }
 
   // Draw the reset button
-  // TODO: create a file for these constants
-  float btnWidth   = 100.0f;
-  float btnHeight  = 30.0f;
-  float btnMarginY = 20.0f;
-  float btnCenterX = (m_width / 2.0f);
-  float btnCenterY = m_height - btnMarginY - (btnHeight / 2.0f);
+  Rectangle btnBounds = Constants::BTN_BOUNDS;
 
-  Rectangle btnBounds = {
-    (m_width / 2.0f) - (btnWidth / 2.0f), m_height - btnMarginY - btnHeight,
-    btnWidth, btnHeight
-  };
-
-  Color btnColor = isBtnHovered ? LIGHTGRAY : GRAY;
+  Color btnColor = isBtnHovered ? Constants::BTN_HOVERED_COLOR : Constants::BTN_UNHOVERED_COLOR;
 
   DrawRectangleRec(btnBounds, btnColor);
-  DrawRectangleLinesEx(btnBounds, 2.0f, BLACK); // Outline
+  DrawRectangleLinesEx(btnBounds, Constants::BTN_OUTLINE_WIDTH, Constants::BTN_OUTLINE_COLOR);
 
-  float fontSize = 15.0f;
-  DrawText("Restart (R)", btnCenterX - fontSize, btnCenterY - fontSize, fontSize, BLACK);
+  int    BTN_TEXT_WIDTH = MeasureText(Constants::BTN_TEXT, Constants::BTN_FONT_SIZE);
+  float  BTN_TEXT_X     = Constants::BTN_START_X + (Constants::BTN_WIDTH  / 2.0f) - (BTN_TEXT_WIDTH / 2.0f);
+  float  BTN_TEXT_Y     = Constants::BTN_START_Y + (Constants::BTN_HEIGHT / 2.0f) - (Constants::BTN_FONT_SIZE  / 2.0f);
+
+  DrawText(
+      Constants::BTN_TEXT,
+      BTN_TEXT_X,
+      BTN_TEXT_Y,
+      Constants::BTN_FONT_SIZE,
+      Constants::BTN_TEXT_COLOR
+  );
 
   EndDrawing();
 }

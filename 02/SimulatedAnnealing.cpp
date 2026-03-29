@@ -1,20 +1,16 @@
 #include "SimulatedAnnealing.h"
+#include "Constants.h"
+
 #include <numeric>
 #include <algorithm>
 #include <cmath>
 
-SimulatedAnnealing::SimulatedAnnealing(
-    const TSPGraph & graph,
-    double startTemp,
-    double minTemp,
-    double coolingRate,
-    int iterationsPerStep
-)
+SimulatedAnnealing::SimulatedAnnealing(const TSPGraph & graph)
   : m_graph(graph),
-    m_currTemp(startTemp),
-    m_minTemp(minTemp),
-    m_coolingRate(coolingRate),
-    m_iterationsPerStep(iterationsPerStep)
+    m_currTemp(Constants::START_TEMP),
+    m_minTemp(Constants::MIN_TEMP),
+    m_coolingRate(Constants::COOLING_RATE),
+    m_iterationsPerStep(Constants::ITERATIONS_PER_STEP)
 {
   std::random_device rd;
   m_gen.seed(rd());
