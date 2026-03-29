@@ -12,32 +12,42 @@ Visualizer::Visualizer(
     m_sa(sa),
     m_width(width),
     m_height(height)
-{
-  // Initialize Raylib window
-  InitWindow(m_width, m_height, "TSP - SimulatedAnnealing");
+{}
 
-  // Set FPS to 60 for smooth animation
-  SetTargetFPS(60);
-}
+bool Visualizer::run() {
+  float btnWidth   = 100.0f;
+  float btnHeight  = 30.0f;
+  float btnMarginY = 20.0f;
 
-Visualizer::~Visualizer() {
-  CloseWindow();
-}
+  Rectangle btnBounds = {
+    (m_width / 2.0f) - (btnWidth / 2.0f), m_height - btnMarginY - btnHeight,
+    btnWidth, btnHeight
+  };
 
-void Visualizer::run() {
   // Run until user closes the window
   while (!WindowShouldClose()) {
+    Vector2 mousePos = GetMousePosition();
+    bool isHovered = CheckCollisionPointRec(mousePos, btnBounds);
+
+    // Button pressed or `R` key is pressed - reset
+    if ((isHovered && IsMouseButtonPressed(MOUSE_LEFT_BUTTON)) || IsKeyPressed(KEY_R)) {
+      EndDrawing();
+      return true;  // Inside main we reset the loop
+    }
+
     // If not on minTemp, do a step
     if (!m_sa.isDone()) {
       m_sa.step();
     }
 
     // Draw right after that
-    draw();
+    draw(isHovered);
   }
+
+  return false; // User closed the window
 }
 
-void Visualizer::draw() {
+void Visualizer::draw(bool isBtnHovered) {
   BeginDrawing();
   ClearBackground(DARKGRAY);
 
@@ -81,6 +91,27 @@ void Visualizer::draw() {
   if (m_sa.isDone()) {
     DrawText("DONE!", 10, 60, 20, RED);
   }
+
+  // Draw the reset button
+  // TODO: create a file for these constants
+  float btnWidth   = 100.0f;
+  float btnHeight  = 30.0f;
+  float btnMarginY = 20.0f;
+  float btnCenterX = (m_width / 2.0f);
+  float btnCenterY = m_height - btnMarginY - (btnHeight / 2.0f);
+
+  Rectangle btnBounds = {
+    (m_width / 2.0f) - (btnWidth / 2.0f), m_height - btnMarginY - btnHeight,
+    btnWidth, btnHeight
+  };
+
+  Color btnColor = isBtnHovered ? LIGHTGRAY : GRAY;
+
+  DrawRectangleRec(btnBounds, btnColor);
+  DrawRectangleLinesEx(btnBounds, 2.0f, BLACK); // Outline
+
+  float fontSize = 15.0f;
+  DrawText("Restart (R)", btnCenterX - fontSize, btnCenterY - fontSize, fontSize, BLACK);
 
   EndDrawing();
 }

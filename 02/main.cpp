@@ -2,6 +2,7 @@
 #include "SimulatedAnnealing.h"
 #include "Visualizer.h"
 
+#include <raylib.h>
 #include <iostream>
 #include <thread>
 #include <chrono>
@@ -17,15 +18,22 @@ int main() {
   double coolingRate = 0.99;
   int iterationsPerStep = 100;
 
-  std::cout << "Generating graph with " << numCities << " cities\n";
-  TSPGraph graph(numCities, screenWidth, screenHeight);
+  InitWindow(screenWidth, screenHeight, "TSP - SimulatedAnnealing");
+  SetTargetFPS(60);
 
-  std::cout << "Initializing simulated annealing...\n\n";
-  SimulatedAnnealing sa(graph, startTemp, minTemp, coolingRate, iterationsPerStep);
+  bool playAgain = true;
 
-  std::cout << "Launching visualization...\n\n";
-  Visualizer viz(graph, sa, screenWidth, screenHeight);
-  viz.run();
+  // 2. Main restart loop
+  while (playAgain) {
+    TSPGraph graph(numCities, screenWidth, screenHeight);
+    SimulatedAnnealing sa(graph, startTemp, minTemp, coolingRate, iterationsPerStep);
+    Visualizer viz(graph, sa, screenWidth, screenHeight);
+
+    playAgain = viz.run();
+  }
+
+  // 3. Safely close the window
+  CloseWindow();
 
   return 0;
 }

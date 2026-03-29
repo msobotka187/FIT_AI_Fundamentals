@@ -3,3 +3,11 @@
 
 # Ignore executable main
 main
+*.exe
+
+# Images
+*.img
+*.png
+
+# Folders
+*/

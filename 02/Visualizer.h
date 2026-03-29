@@ -13,10 +13,10 @@ public:
       int width,
       int height
   );
-  ~Visualizer();
+  ~Visualizer() = default;
 
   // Main window loop
-  void run();
+  bool run();
 
 private:
   const TSPGraph & m_graph;
@@ -25,7 +25,7 @@ private:
   int m_height;
 
   // Drawing itself
-  void draw();
+  void draw(bool isBtnHovered);
 };
 
 #endif // VISUALIZER_H
