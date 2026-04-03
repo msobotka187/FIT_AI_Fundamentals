@@ -68,7 +68,11 @@ julia --project=. -e 'using Pkg; Pkg.test()'
 
 ## 📊 Benchmarks & The 25x25 Challenge
 A standard $9 \times 9$ Sudoku has $6.67 \times 10^{21}$ valid grids. A $25 \times 25$ grid pushes the limits of standard computer science hardware due to Combinatorial Explosion.\
-Using the Integer Programming Solver to generate the initial grid via mathematical constraints, the $25 \times 25$ puzzle was generated and solved in **~100 seconds**.\
+Using the Integer Programming Solver to generate the initial grid via mathematical constraints, the $25 \times 25$ puzzle was generated and solved in **~100 seconds**.
+
+> Note: $25 \times 25$ only runs in console, the visuals are not able to handle the calculations simultaneously.
+
+
 To run the benchmarks locally:
 ```bash
 julia --project=. -e 'using Sudoku.SudokuBenchmark; run_benchmarks()'
