@@ -28,3 +28,48 @@ This project explores the limits of heuristic search algorithms and the absolute
 │   └── main.jl                   # Executable script showcasing the pipeline
 └── test/
     └── runtests.jl               # Comprehensive test suite (edge cases, math proofs)
+```
+
+
+## 🚀 Installation & Setup
+
+This project uses Julia's built-in package manager to guarantee a reproducible environment. You do not need to install heavy libraries manually.
+
+### Step 1:
+```bash
+git clone https://gitlab.fit.cvut.cz/sobotma8/bi-zum-ls2026-sobotma8.git
+```
+```bash
+cd bi-zum-ls2026-sobotma8/semestralka
+```
+
+### Step 2:
+```bash
+julia --project=. -e 'using Pkg; Pkg.instantiante()'
+```
+
+
+## 🎮 Usage
+
+To run the full demonstration (Generates a puzzle -> Opens GUI -> Solves via IP -> Opens Solved GUI):
+```bash
+julia --project=. src/main.jl
+```
+
+> Note on **TTFX** (Time To First Execution): The first time you run the visualizer or solver, Julia will precompile the heavy math and graphics libraries. This may take 10-30 seconds. Subsequent runs in the same REPL session are nearly instantaneous.
+
+## 🧪 Testing
+The project includes a robust test suite that verifies data structure integrity, handles edge cases (e.g., negative matrix sizes, unsolvable constraints), and mathematically proves that the solver's output is a legally valid Sudoku.
+
+To run the tests:
+```bash
+julia --project=. -e 'using Pkg; Pkg.test()'
+```
+
+## 📊 Benchmarks & The 25x25 Challenge
+A standard $9 \times 9$ Sudoku has $6.67 \times 10^{21}$ valid grids. A $25 \times 25$ grid pushes the limits of standard computer science hardware due to Combinatorial Explosion.\
+Using the Integer Programming Solver to generate the initial grid via mathematical constraints, the $25 \times 25$ puzzle was generated and solved in **~100 seconds**.\
+To run the benchmarks locally:
+```bash
+julia --project=. -e 'using Sudoku.SudokuBenchmark; run_benchmarks()'
+```
