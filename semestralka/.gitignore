@@ -1,0 +1,2 @@
+# Ignore Sysimage files
+bin/*.so
