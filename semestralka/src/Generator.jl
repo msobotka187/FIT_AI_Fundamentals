@@ -88,6 +88,9 @@ end # funciton solve_fast!
 
 # The main generator function
 function generate_puzzle(; board_size::Int=9, cells_empty::Int=45)
+  @assert board_size > 0 && isqrt(board_size)^2 == board_size "board_size is not a perfect square"
+  @assert 0 <= cells_empty <= board_size^2 "cells_empty out of range"
+
   b = round(Int, sqrt(board_size))
   grid = zeros(Int, board_size, board_size)
 
