@@ -20,86 +20,115 @@ struct SudokuBoard
   end # function SudokuBoard
 end # struct SudokuBoard
 
-# Validation logic
-# Check if placing 'num' at (row, col) violates Sudoku rules
-function is_safe(grid::Matrix{Int}, row::Int, col::Int, b::Int, num::Int)
-  s::Int = size(grid, 1)
+# Helper function to find which block a row/col belongs to
+@inline function get_block(r::Int, c::Int, b::Int)
+  return b * ((r - 1) ÷ b) + ((c - 1) ÷ b) + 1
+end # funciton get_block
 
-  # Check row and col
-  for i::Int in 1:s
-    if grid[row, i] == num || grid[i, col] == num
-      return false
-    end # if
-  end # for
+# Fill the independant diagonal blocks randomly
+function fill_diag_blocks!(grid::Matrix{Int}, s::Int, b::Int)
+  for i in 1:b
+    start_row = (i - 1) * b + 1
+    start_col = (i - 1) * b + 1
 
-  # Check block
-  start_row::Int = b * ((row - 1) ÷ b) + 1
-  start_col::Int = b * ((col - 1) ÷ b) + 1
-
-  for i::Int in 0:(b-1)
-    for j::Int in 0:(b-1)
-      if grid[start_row + i, start_col + j] == num
-        return false
-      end # if
-    end # for j
+    nums = shuffle(1:s)
+    idx::Int = 1
+    for r in start_row:(start_row + b - 1)
+      for c in start_col:(start_col + b - 1)
+        grid[r, c] = nums[idx]
+        idx += 1
+      end # for c
+    end # for r
   end # for i
+end # funciton fill_diag_blocks!
 
-  return true
-end # function is_safe
+# Recursive solver using boolean state tracking
+function solve_fast!(grid::Matrix{Int}, s::Int, b::Int, rows::BitMatrix, cols::BitMatrix, blocks::BitMatrix)
+  # Find next empty cell
+  r_empty, c_empty = 0, 0
+  for r in 1:s
+    for c in 1:s
+      if grid[r, c] == 0
+        r_empty, c_empty = r, c
+        break
+      end
+    end # for c
+  end # for r
 
-# Randomized Backtracking to fill the board inplace
-function fill_board!(grid::Matrix{Int}, b::Int)
-  s::Int = size(grid, 1)
-  for row::Int in 1:s
-    for col::Int in 1:s
-      if grid[row, col] == 0
-        # Randomly shuffle numbers to ensure a random board
-        nums = shuffle(1:s)
-        for num in nums
-          if is_safe(grid, row, col, b, num)
-            grid[row, col] = num
+  # If no empty cells are found, the board is solved
+  if r_empty == 0
+    return true
+  end
 
-            # Recursively try to fill the rest of the board
-            if fill_board!(grid, b)
-              return true
-            end # if
+  r, c, = r_empty, c_empty
+  block = get_block(r, c, b)
 
-            # If it leads to a dead end, backtrack
-            grid[row, col] = 0
-          end # if is_safe
-        end # for num
+  for num in 1:s
+    # Checks legality of placing num
+    if !rows[r, num] && !cols[c, num] && !blocks[block, num]
+      grid[r, c] = num
+      rows[r, num] = true
+      cols[c, num] = true
+      blocks[block, num] = true
 
-        return false # Trigger backtracking
-      end # if grid[row, cols] == 0
-    end # for col in 1:s
-  end # for row in 1:s
+      if solve_fast!(grid, s, b, rows, cols, blocks)
+        return true
+      end
 
-  return true # completely filled
-end # funcion fill_board!
+      # Backtrack
+      grid[r, c] = 0
+      rows[r, num] = false
+      cols[c, num] = false
+      blocks[block, num] = false
+    end # if !r && !c && !b
+  end # for num
 
-# The main generator
-function generate_puzzle(; board_size::Int=9, empty_cells::Int=40)
-  b::Int = round(Int, sqrt(board_size))
-  @assert b^2 == board_size "Board is not a perfect square (e.g. 9, 16, 25)"
+  return false
+end # funciton solve_fast!
 
-  # Create empty grid and fill it completely
-  grid::Matrix{Int} = zeros(Int, board_size, board_size)
-  fill_board!(grid, b)
+# The main generator function
+function generate_puzzle(; board_size::Int=9, cells_empty::Int=45)
+  b = round(Int, sqrt(board_size))
+  grid = zeros(Int, board_size, board_size)
 
-  # Remove cells to create a puzzle
-  cells_remove::Int = 0
-  while cells_remove < empty_cells
-    r::Int = rand(1:board_size)
-    c::Int = rand(1:board_size)
+  # Prefil diagonal blocks
+  fill_diag_blocks!(grid, board_size, b)
 
+  # Setup state tracking matrices
+  # First dim (row) what row/col/block are we in
+  # Second dim (col) what numbers are there
+  rows_used   = falses(board_size, board_size)
+  cols_used   = falses(board_size, board_size)
+  blocks_used = falses(board_size, board_size)
+
+  # Register numbers we just placed in the diagonals
+  for r in 1:board_size
+    for c in 1:board_size
+      val = grid[r, c]
+      if val != 0
+        rows_used[r, val] = true
+        cols_used[c, val] = true
+        blocks_used[get_block(r, c, b), val] = true
+      end # if
+    end # for c
+  end # for r
+
+  # Solve the rest
+  solve_fast!(grid, board_size, b, rows_used, cols_used, blocks_used)
+
+  # Make holes
+  cells_removed = 0
+  while cells_removed < cells_empty
+    r = rand(1:board_size)
+    c = rand(1:board_size)
     if grid[r, c] != 0
       grid[r, c] = 0
-      cells_remove += 1
+      cells_removed += 1
     end # if
-  end # end while
+  end # while
 
   return SudokuBoard(grid)
-end # funciton generate_puzzle
+end # function generate_puzzle
 
 # Console board printing
 function print_board(board::SudokuBoard)
