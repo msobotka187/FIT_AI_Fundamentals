@@ -131,6 +131,9 @@ function generate_puzzle(; board_size::Int=9, cells_empty::Int=45)
 end # function generate_puzzle
 
 # Console board printing
+function print_board(board::Matrix{Int})
+  print_board(SudokuBoard(board))
+end
 function print_board(board::SudokuBoard)
   s::Int = board.size
   b::Int = board.block_size
