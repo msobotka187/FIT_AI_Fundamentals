@@ -1,4 +1,5 @@
 import os
+import random
 
 def generate_problem(filename, size_x, size_y, tower_height, print_err=True):
     # General checks
@@ -83,8 +84,8 @@ def generate_problem(filename, size_x, size_y, tower_height, print_err=True):
         # Goal Generation
         f.write("  (:goal (and\n")
 
-        # We want to build the tower at loc_1_1
-        target_loc = "loc_1_1"
+        # We want to build the tower somewhere in the grid
+        target_loc = f"loc_{random.randint(0, size_x - 1)}_{random.randint(0, size_y - 1)}"
 
         # The first block needs to be on the ground at the target location
         f.write(f"    (at-block b1 {target_loc})\n")
