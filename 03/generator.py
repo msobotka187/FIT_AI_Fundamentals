@@ -142,7 +142,7 @@ if __name__ == "__main__":
     print("\n--- GENERATING FILES ---")
     print_error = True
 
-    params = [(3, 3, 3), (5, 5, 5), (7, 7, 3), (10, 10, 25), (20, 20, 200)]
+    params = [(3, 3, 3), (5, 6, 5), (7, 7, 3)]
     for i, (x, y, h) in enumerate(params):
         filename = f"problem{i + 1}.pddl"
         if generate_problem(filename, x, y, h, print_err=print_error):
