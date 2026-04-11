@@ -64,9 +64,12 @@ def generate_problem(filename, size_x, size_y, tower_height, print_err=True):
         # Get all grid locations except (0,0) where the robot starts
         available_locs = [(x,y) for x in range(size_x) for y in range(size_y) if (x,y) != (0,0)]
 
+        # Pick 'tower_height' amount of unique random locations
+        chosen_locs = random.sample(available_locs, tower_height)
+
         block_positions = []
         for i in range(tower_height):
-            bx, by = available_locs[i]
+            bx, by = chosen_locs[i]  # Use the randomly chosen locations here
             block_positions.append((bx, by))
             # The block is at the location, on the floor, and has nothing on top of it
             f.write(f"    (at-block b{i+1} loc_{bx}_{by})\n")
