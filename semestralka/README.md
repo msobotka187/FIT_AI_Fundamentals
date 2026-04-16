@@ -1,4 +1,4 @@
-# 🧩 AI Sudoku Solver: Integer Programming
+# 🧩 Sudoku Solver: Integer Programming
 
 [![Julia](https://img.shields.io/badge/Language-Julia_1.11+-9558B2?style=flat&logo=julia)](https://julialang.org/)
 [![Optimization](https://img.shields.io/badge/Solver-HiGHS_via_JuMP-blue)](https://jump.dev/)
