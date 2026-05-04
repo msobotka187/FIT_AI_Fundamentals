@@ -45,9 +45,24 @@ cd bi-zum-ls2026-sobotma8/semestralka
 
 ### Step 2:
 ```bash
-julia --project=. -e 'using Pkg; Pkg.instantiante()'
+julia
 ```
 
+### Step 3:
+```julia
+using Revise
+includet("src/main.jl")
+run()
+```
+Note: `includet` is not a typo, the **t** at the end is intended.\
+You can then try different sizes just by passing the size as a parameter:
+
+```julia
+run(9)  # Default - Super fast
+run(16) # 16x16 puzzle - Still fast
+run(25) # 25x25 - takes around a minute to solve
+```
+Larger puzzles are not recommended due to computational capacity.
 
 ## 🎮 Usage
 
