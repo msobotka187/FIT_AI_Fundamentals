@@ -35,6 +35,9 @@ This project explores the limits of heuristic search algorithms and the absolute
 
 First, download the project repository to your local machine:
 
+### Step 0 - Dependencies:
+* You must have [Julia (v1.11+)](https://julialang.org/downloads/) installed on your system.
+
 ### Step 1:
 ```bash
 git clone https://gitlab.fit.cvut.cz/sobotma8/bi-zum-ls2026-sobotma8.git
