@@ -77,7 +77,7 @@ To run the automated tests, simply use Julia's package manager:
 ```julia
 using Pkg
 Pkg.activate(".")
-Pkg.test()
+include("test/runtests.jl");
 ```
 
 ## 📊 Benchmarks & The 25x25 Challenge
