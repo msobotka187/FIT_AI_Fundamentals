@@ -17,7 +17,7 @@ function is_legal_solution(grid::Matrix{Int})
 
   # 2. Block check
   for br in 0:(b-1), bc in 0:(b-1)
-    # Takes the submatrix and but it into a vector
+    # Takes the submatrix and puts it into a vector
     block = grid[(br*b + 1):(br*b + b), (bc*b + 1):(bc*b + b)]
     if length(unique(block)) != s return false end
   end
@@ -38,7 +38,7 @@ end
 end
 
 #-------------------------------------------------------
-@testset "Generator (Parametry a Edge Cases)           " begin
+@testset "Generator (Parameters & Edge Cases)          " begin
   # cells_empty out of range
   @test_throws AssertionError generate_puzzle(board_size=9, cells_empty=-5)
   @test_throws AssertionError generate_puzzle(board_size=9, cells_empty=100) # Max is 81
@@ -57,7 +57,7 @@ end
 end
 
 #-------------------------------------------------------
-@testset "Exact Solver (Correctness for differnet dims)" begin
+@testset "Exact Solver (Correctness for different dims)" begin
   # Ranges for test
   dimensions = [4, 9, 16]
 
@@ -93,7 +93,7 @@ end
 end
 
 #-------------------------------------------------------
-@testset "Exact Solver - Unsolvealbe                   " begin
+@testset "Exact Solver - Unsolvable                    " begin
   broken_grid = zeros(Int, 9, 9)
 
   # Intentionally broken grid

@@ -23,9 +23,9 @@ end # struct SudokuBoard
 # Helper function to find which block a row/col belongs to
 @inline function get_block(r::Int, c::Int, b::Int)
   return b * ((r - 1) ÷ b) + ((c - 1) ÷ b) + 1
-end # funciton get_block
+end # function get_block
 
-# Fill the independant diagonal blocks randomly
+# Fill the independent diagonal blocks randomly
 function fill_diag_blocks!(grid::Matrix{Int}, s::Int, b::Int)
   for i in 1:b
     start_row = (i - 1) * b + 1
@@ -40,7 +40,7 @@ function fill_diag_blocks!(grid::Matrix{Int}, s::Int, b::Int)
       end # for c
     end # for r
   end # for i
-end # funciton fill_diag_blocks!
+end # function fill_diag_blocks!
 
 # Recursive solver using boolean state tracking
 function solve_fast!(grid::Matrix{Int}, s::Int, b::Int, rows::BitMatrix, cols::BitMatrix, blocks::BitMatrix)
@@ -84,7 +84,7 @@ function solve_fast!(grid::Matrix{Int}, s::Int, b::Int, rows::BitMatrix, cols::B
   end # for num
 
   return false
-end # funciton solve_fast!
+end # function solve_fast!
 
 # The main generator function
 function generate_puzzle(; board_size::Int=9, cells_empty::Int=45)
@@ -94,7 +94,7 @@ function generate_puzzle(; board_size::Int=9, cells_empty::Int=45)
   b = round(Int, sqrt(board_size))
   grid = zeros(Int, board_size, board_size)
 
-  # Prefil diagonal blocks
+  # Prefill diagonal blocks
   fill_diag_blocks!(grid, board_size, b)
 
   # Setup state tracking matrices
