@@ -66,7 +66,6 @@ include("src/main.jl")
 # Run different sizes by passing the dimension as an integer:
 run(9)  # Default 9x9 - Super fast
 run(16) # 16x16 puzzle - Still fast
-run(25) # 25x25 puzzle - Takes around a minute to solve
 ```
 *(Larger puzzles are not recommended if you have limited computational capacity or RAM, as the graphics rendering becomes highly demanding).*
 
@@ -82,7 +81,7 @@ include("test/runtests.jl");
 
 ## 📊 Benchmarks & The 25x25 Challenge
 A standard $9 \times 9$ Sudoku has $6.67 \times 10^{21}$ valid grids. A $25 \times 25$ grid pushes the limits of standard computer science hardware due to Combinatorial Explosion.\
-Using the Integer Programming Solver to generate the initial grid via mathematical constraints, the $25 \times 25$ puzzle was generated and solved in **~100 seconds**.
+Using the Integer Programming Solver to generate the initial grid via mathematical constraints, the $25 \times 25$ puzzle is a real challenge and may require better PC specs.
 
 To run the benchmarking suite and observe performance metrics locally:
 ```julia
