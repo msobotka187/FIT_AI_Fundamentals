@@ -84,17 +84,3 @@ include("test/runtests.jl");
 Note: If you get ambiguity error, simply restart Julia REPL:
 - `Ctrl + D`
 - `julia`
-
-## 📊 Benchmarks & The 25x25 Challenge
-A standard $9 \times 9$ Sudoku has $6.67 \times 10^{21}$ valid grids. A $25 \times 25$ grid pushes the limits of standard computer science hardware due to Combinatorial Explosion.\
-Using the Integer Programming Solver to generate the initial grid via mathematical constraints, the $25 \times 25$ puzzle is a real challenge and may require better PC specs.
-
-To run the benchmarking suite and observe performance metrics locally:
-```julia
-using Pkg
-Pkg.activate(".")
-include("src/Benchmark.jl")
-
-using .SudokuBenchmark
-run_benchmarks()
-```
