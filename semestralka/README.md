@@ -33,7 +33,7 @@ This project explores the limits of heuristic search algorithms and the absolute
 
 ## 🚀 Installation & Setup
 
-This project uses Julia's built-in package manager to guarantee a reproducible environment. You do not need to install heavy libraries manually.
+First, download the project repository to your local machine:
 
 ### Step 1:
 ```bash
@@ -43,52 +43,53 @@ git clone https://gitlab.fit.cvut.cz/sobotma8/bi-zum-ls2026-sobotma8.git
 cd bi-zum-ls2026-sobotma8/semestralka
 ```
 
-### Step 2:
+From this point forward, all commands should be executed inside the Julia REPL. Start Julia in your terminal by typing:
 ```bash
 julia
 ```
 
-### Step 3:
-```julia
-using Revise
-includet("src/main.jl")
-run()
-```
-Note: `includet` is not a typo, the **t** at the end is intended.\
-You can then try different sizes just by passing the size as a parameter:
+Once inside the Julia REPL, activate the project environment and instantiate the packages. This ensures all heavy math and graphics dependencies (JuMP, HiGHS, GLMakie) are properly installed:
 
 ```julia
-run(9)  # Default - Super fast
-run(16) # 16x16 puzzle - Still fast
-run(25) # 25x25 - takes around a minute to solve
+using Pkg
+Pkg.activate(".")
+Pkg.instantiate()
 ```
-Larger puzzles are not recommended due to computational capacity.
 
 ## 🎮 Usage
+To run the interactive visualizer and test the solver, simply include the main script and call the `run()` function.
+- Note on TTFX (Time To First Execution): The first time you run the visualizer or solver, Julia will precompile the heavy math and graphics libraries. This may take 10-30 seconds. Subsequent runs in the same session will be nearly instantaneous.
 
-To run the full demonstration (Generates a puzzle -> Opens GUI -> Solves via IP -> Opens Solved GUI):
-```bash
-julia --project=. src/main.jl
+```julia
+include("src/main.jl")
+
+# Run different sizes by passing the dimension as an integer:
+run(9)  # Default 9x9 - Super fast
+run(16) # 16x16 puzzle - Still fast
+run(25) # 25x25 puzzle - Takes around a minute to solve
 ```
-
-> Note on **TTFX** (Time To First Execution): The first time you run the visualizer or solver, Julia will precompile the heavy math and graphics libraries. This may take 10-30 seconds. Subsequent runs in the same REPL session are nearly instantaneous.
+*(Larger puzzles are not recommended if you have limited computational capacity or RAM, as the graphics rendering becomes highly demanding).*
 
 ## 🧪 Testing
 The project includes a robust test suite that verifies data structure integrity, handles edge cases (e.g., negative matrix sizes, unsolvable constraints), and mathematically proves that the solver's output is a legally valid Sudoku.
 
-To run the tests:
-```bash
-julia --project=. -e 'using Pkg; Pkg.test()'
+To run the automated tests, simply use Julia's package manager:
+```julia
+using Pkg
+Pkg.activate(".")
+Pkg.test()
 ```
 
 ## 📊 Benchmarks & The 25x25 Challenge
 A standard $9 \times 9$ Sudoku has $6.67 \times 10^{21}$ valid grids. A $25 \times 25$ grid pushes the limits of standard computer science hardware due to Combinatorial Explosion.\
 Using the Integer Programming Solver to generate the initial grid via mathematical constraints, the $25 \times 25$ puzzle was generated and solved in **~100 seconds**.
 
-> Note: $25 \times 25$ only runs in console, the visuals are not able to handle the calculations simultaneously.
+To run the benchmarking suite and observe performance metrics locally:
+```julia
+using Pkg
+Pkg.activate(".")
+include("src/Benchmark.jl")
 
-
-To run the benchmarks locally:
-```bash
-julia --project=. -e 'using Sudoku.SudokuBenchmark; run_benchmarks()'
+using .SudokuBenchmark
+run_benchmarks()
 ```
