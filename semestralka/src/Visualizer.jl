@@ -32,11 +32,14 @@ function _draw_core(grid::Matrix{Int}, original_grid::Matrix{Int}, title_text::S
   hidedecorations!(ax)
   hidespines!(ax)
 
+  thick_line = max(1.5, 36.0 / s)
+  thin_line  = max(0.5, 9.0 / s)
+
   # Draw sudoku lines
   for i in 0:s
-    linewidth = (i % b == 0) ? 4.0 : 1.0
+    linewidth = (i % b == 0) ? thick_line : thin_line
     color     = (i % b == 0) ? :black : :gray
-
+    
     # Vertical lines
     lines!(ax, [i, i], [0, s], color=color, linewidth=linewidth)
     # Horizontal lines
@@ -53,7 +56,7 @@ function _draw_core(grid::Matrix{Int}, original_grid::Matrix{Int}, title_text::S
         y_pos = (s - r) + 0.5
 
         # Dynamic font
-        f_size = 96 / (ndigits(s) + 1)
+        f_size = 432 / s
 
         # Original numbers: black
         # Solved   numbers: blue
@@ -93,9 +96,12 @@ function draw_interactive_board(board, solver_func)
   function draw_grid!(target_ax, current_grid::Matrix{Int})
     empty!(target_ax) # Clears the board
 
+    thick_line = max(1.5, 36.0 / s)
+    thin_line  = max(0.5, 9.0 / s)
+
     # Lines
     for i in 0:s
-      linewidth = (i % b == 0) ? 4.0 : 1.0
+      linewidth = (i % b == 0) ? thick_line : thin_line
       color     = (i % b == 0) ? :black : :gray
       lines!(target_ax, [i, i], [0, s], color=color, linewidth=linewidth)
       lines!(target_ax, [0, s], [i, i], color=color, linewidth=linewidth)
@@ -108,7 +114,8 @@ function draw_interactive_board(board, solver_func)
         if val != 0
           x_pos = c - 0.5
           y_pos = (s - r) + 0.5
-          f_size = 96 / (ndigits(s) + 1)
+
+          f_size = 432 / s
           text_color = (grid_orig[r, c] == 0) ? :blue : :black
 
           text!(
