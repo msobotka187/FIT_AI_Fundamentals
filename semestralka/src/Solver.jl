@@ -18,35 +18,23 @@ function sudoku_solver_ip(grid::Matrix{Int})
   model = Model(HiGHS.Optimizer)
   set_silent(model) # Silence the math console output
 
+  # Disable string names
+  set_string_names_on_creation(model, false)
+
   # Variables:     x[r,   c,   v] is a binary variable
   @variable(model, x[1:s, 1:s, 1:s], Bin)
 
-  # Constraints
-
-  # 1. Every cell must have exactly ONE number
-  for r in 1:s, c in 1:s
-    @constraint(model, sum(x[r, c, v] for v in 1:s) == 1)
-  end
-
-  # 2. Every row must have exactly ONE of each number
-  for r in 1:s, v in 1:s
-    @constraint(model, sum(x[r, c, v] for c in 1:s) == 1)
-  end
-
-  # 3. Every col must have exactly ONE of each number
-  for c in 1:s, v in 1:s
-    @constraint(model, sum(x[r, c, v] for r in 1:s) == 1)
-  end
-
-  # 4. Every block must have exactly ONE of each number
-  for br in 0:(b-1), bc in 0:(b-1), v in 1:s
-    @constraint(model, sum(x[br*b + i, bc*b + j, v] for i in 1:b, j in 1:b) == 1)
-  end
+  # Constraints (vectorized)
+  @constraint(model, [r=1:s, c=1:s], sum(x[r, c, v] for v in 1:s) == 1)
+  @constraint(model, [r=1:s, v=1:s], sum(x[r, c, v] for c in 1:s) == 1)
+  @constraint(model, [c=1:s, v=1:s], sum(x[r, c, v] for r in 1:s) == 1)
+  @constraint(model, [br=0:(b-1), bc=0:(b-1), v=1:s], 
+              sum(x[br*b + i, bc*b + j, v] for i in 1:b, j in 1:b) == 1)
 
   # 5. Enforce prefilled numbers from generator
   for r in 1:s, c in 1:s
     if grid[r, c] != 0
-      @constraint(model, x[r, c, grid[r, c]] == 1)
+      fix(x[r, c, grid[r, c]], 1; force=true)
     end
   end
 
@@ -88,7 +76,7 @@ function generate_puzzle_ip(board_size::Int, cells_empty::Int)
   solved_grid = sudoku_solver_ip(grid)
 
   if solved_grid === nothing
-    error("IP solver nedok√°zal vygenerovat desku.")
+    error("IP solver nedok·zal vygenerovat desku.")
   end
 
   cells_removed = 0
