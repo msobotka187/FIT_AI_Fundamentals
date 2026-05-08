@@ -76,7 +76,7 @@ function generate_puzzle_ip(board_size::Int, cells_empty::Int)
   solved_grid = sudoku_solver_ip(grid)
 
   if solved_grid === nothing
-    error("IP solver nedokázal vygenerovat desku.")
+    error("IP solver nedokazal vygenerovat desku.")
   end
 
   cells_removed = 0
